@@ -1,0 +1,41 @@
+/*
+ * spi.h
+ *
+ *  Created on: Mar 11, 2023
+ *      Author: silvere
+ */
+
+#ifndef INCLUDES_SPI_H_
+#define INCLUDES_SPI_H_
+
+#include "global.h"
+
+#define SPI_SLK 	GPIO_PIN_3 //PB5
+#define SPI_MISO 	GPIO_PIN_4 //PB6
+#define SPI_MOSI	GPIO_PIN_5 //PB7
+#define SPI_CS		GPIO_PIN_6 //PB6
+
+
+typedef struct
+{
+	SPI_HandleTypeDef *spi;
+	uint8_t *spiRxBuffer;
+	uint8_t *spiTxBuffer;
+	uint8_t size;
+}SpiDev_T;
+
+extern uint8_t spiRxBuffer[10];
+extern uint8_t spiTxBuffer[10];
+extern SPI_HandleTypeDef hspi1;
+extern SpiDev_T spiDev;
+
+
+void spiSetup(void);
+void spiGpioSetup(void);
+void spiHardwareSetup(void);
+
+void spiDevConfig(SpiDev_T *spiDev, SPI_HandleTypeDef *hspi, uint8_t *rxBuffer, uint8_t *txBuffer, uint8_t size);
+void spiSendCmd(SpiDev_T *spiDev, uint8_t *rxBuffer, uint8_t size);
+void spiGetData(SpiDev_T *spiDev, uint8_t *txBuffer, uint8_t size);
+
+#endif /* INCLUDES_SPI_H_ */
