@@ -24,8 +24,6 @@ typedef enum
 	DEFAULT_TASK
 }TaskType_T;
 
-#define LED_DELAY_1_S 		1000
-#define LED_DELAY_500_MS	500
 
 uint16_t ledDelay = 0;
 uint8_t notify = 0;
@@ -146,7 +144,7 @@ void vUartHandleCmd(UartDev_T *uartDev)
 		{
 			// Call Temperature task
 			// Blink LED 1/2 second
-			ledDelay = 25;
+			ledDelay = LED_DELAY_500_MS;
 			notify = 1;
 			taskType = TEMPERATURE_TASK;
 			xTaskNotify(xledTaskHandle, 0, eNoAction);
@@ -157,7 +155,7 @@ void vUartHandleCmd(UartDev_T *uartDev)
 			// Call accelerometer
 			// Print angle every 2 seconds
 			// Turn LED every 1 second
-			ledDelay = 50;
+			ledDelay = LED_DELAY_1_S;
 			notify = 1;
 			taskType = ACCELEROMETER_TASK;
 			xTaskNotify(xledTaskHandle, 0, eNoAction);

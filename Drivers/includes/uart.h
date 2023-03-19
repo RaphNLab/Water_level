@@ -14,6 +14,9 @@
 #define UART_TX GPIO_PIN_2
 #define UART_RX GPIO_PIN_3
 
+#define LED_DELAY_1_S 		50
+#define LED_DELAY_500_MS	25
+
 #define LED3_PIN GPIO_PIN_3
 #define LED4_PIN GPIO_PIN_4
 #define LED5_PIN GPIO_PIN_5

@@ -460,9 +460,9 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x16 Drivers/src/mpu_9250.o
  .debug_macro   0x0000000000000000       0x16 Drivers/src/mpu_9250.o
  .debug_macro   0x0000000000000000       0x29 Drivers/src/mpu_9250.o
- .debug_macro   0x0000000000000000       0xa0 Drivers/src/mpu_9250.o
+ .debug_macro   0x0000000000000000       0xa6 Drivers/src/mpu_9250.o
  .debug_line    0x0000000000000000      0xd2d Drivers/src/mpu_9250.o
- .debug_str     0x0000000000000000    0xac004 Drivers/src/mpu_9250.o
+ .debug_str     0x0000000000000000    0xac014 Drivers/src/mpu_9250.o
  .comment       0x0000000000000000       0x80 Drivers/src/mpu_9250.o
  .debug_frame   0x0000000000000000       0xd0 Drivers/src/mpu_9250.o
  .ARM.attributes
@@ -564,7 +564,7 @@ Discarded input sections
  .data          0x0000000000000000        0x0 Drivers/src/spi.o
  .bss           0x0000000000000000        0x0 Drivers/src/spi.o
  .text.spiSendCmd
-                0x0000000000000000       0x18 Drivers/src/spi.o
+                0x0000000000000000       0x50 Drivers/src/spi.o
  .text.spiGetData
                 0x0000000000000000       0x18 Drivers/src/spi.o
  .debug_macro   0x0000000000000000      0xa72 Drivers/src/spi.o
@@ -11311,7 +11311,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x16 src/main.o
  .debug_macro   0x0000000000000000       0x16 src/main.o
  .debug_macro   0x0000000000000000       0x29 src/main.o
- .debug_macro   0x0000000000000000       0x2e src/main.o
+ .debug_macro   0x0000000000000000       0x3a src/main.o
  .group         0x0000000000000000        0xc src/stm32l1xx_it.o
  .group         0x0000000000000000        0xc src/stm32l1xx_it.o
  .group         0x0000000000000000        0xc src/stm32l1xx_it.o
@@ -12595,45 +12595,45 @@ LOAD /home/silvere/Ac6/SystemWorkbench/plugins/fr.ac6.mcu.externaltools.arm-none
                 0x0000000000000617       0x1d /home/silvere/Ac6/SystemWorkbench/plugins/fr.ac6.mcu.externaltools.arm-none.linux64_1.17.0.201812190825/tools/compiler/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7-m/crtn.o
 OUTPUT(Water_level.elf elf32-littlearm)
 
-.debug_info     0x0000000000000000    0x14eef
+.debug_info     0x0000000000000000    0x14efb
  .debug_info    0x0000000000000000     0x11ef Drivers/src/i2c.o
  .debug_info    0x00000000000011ef      0x995 Drivers/src/memory.o
- .debug_info    0x0000000000001b84     0x1395 Drivers/src/spi.o
- .debug_info    0x0000000000002f19     0x1400 Drivers/src/uart.o
- .debug_info    0x0000000000004319     0x157e HAL_Driver/Src/stm32l1xx_hal_cortex.o
- .debug_info    0x0000000000005897      0xe9c HAL_Driver/Src/stm32l1xx_hal_gpio.o
- .debug_info    0x0000000000006733     0x2693 HAL_Driver/Src/stm32l1xx_hal_i2c.o
- .debug_info    0x0000000000008dc6     0x1dd8 HAL_Driver/Src/stm32l1xx_hal_rcc.o
- .debug_info    0x000000000000ab9e     0x1736 HAL_Driver/Src/stm32l1xx_hal_spi.o
- .debug_info    0x000000000000c2d4      0xe41 HAL_Driver/Src/stm32l1xx_hal_spi_ex.o
- .debug_info    0x000000000000d115     0x16ca HAL_Driver/Src/stm32l1xx_hal_uart.o
- .debug_info    0x000000000000e7df      0xadb Third_party/FreeRTOS/org/Source/list.o
- .debug_info    0x000000000000f2ba     0x268c Third_party/FreeRTOS/org/Source/tasks.o
- .debug_info    0x0000000000011946      0x3b8 Third_party/FreeRTOS/org/Source/portable/GCC/ARM_CM3/port.o
- .debug_info    0x0000000000011cfe      0xc2a Third_party/FreeRTOS/org/Source/portable/MemMang/heap_4.o
- .debug_info    0x0000000000012928     0x1934 src/main.o
- .debug_info    0x000000000001425c      0xc71 src/system_stm32l1xx.o
- .debug_info    0x0000000000014ecd       0x22 startup/startup_stm32l152xe.o
+ .debug_info    0x0000000000001b84     0x13a1 Drivers/src/spi.o
+ .debug_info    0x0000000000002f25     0x1400 Drivers/src/uart.o
+ .debug_info    0x0000000000004325     0x157e HAL_Driver/Src/stm32l1xx_hal_cortex.o
+ .debug_info    0x00000000000058a3      0xe9c HAL_Driver/Src/stm32l1xx_hal_gpio.o
+ .debug_info    0x000000000000673f     0x2693 HAL_Driver/Src/stm32l1xx_hal_i2c.o
+ .debug_info    0x0000000000008dd2     0x1dd8 HAL_Driver/Src/stm32l1xx_hal_rcc.o
+ .debug_info    0x000000000000abaa     0x1736 HAL_Driver/Src/stm32l1xx_hal_spi.o
+ .debug_info    0x000000000000c2e0      0xe41 HAL_Driver/Src/stm32l1xx_hal_spi_ex.o
+ .debug_info    0x000000000000d121     0x16ca HAL_Driver/Src/stm32l1xx_hal_uart.o
+ .debug_info    0x000000000000e7eb      0xadb Third_party/FreeRTOS/org/Source/list.o
+ .debug_info    0x000000000000f2c6     0x268c Third_party/FreeRTOS/org/Source/tasks.o
+ .debug_info    0x0000000000011952      0x3b8 Third_party/FreeRTOS/org/Source/portable/GCC/ARM_CM3/port.o
+ .debug_info    0x0000000000011d0a      0xc2a Third_party/FreeRTOS/org/Source/portable/MemMang/heap_4.o
+ .debug_info    0x0000000000012934     0x1934 src/main.o
+ .debug_info    0x0000000000014268      0xc71 src/system_stm32l1xx.o
+ .debug_info    0x0000000000014ed9       0x22 startup/startup_stm32l152xe.o
 
-.debug_abbrev   0x0000000000000000     0x2bf5
+.debug_abbrev   0x0000000000000000     0x2c04
  .debug_abbrev  0x0000000000000000      0x265 Drivers/src/i2c.o
  .debug_abbrev  0x0000000000000265      0x20b Drivers/src/memory.o
- .debug_abbrev  0x0000000000000470      0x26e Drivers/src/spi.o
- .debug_abbrev  0x00000000000006de      0x293 Drivers/src/uart.o
- .debug_abbrev  0x0000000000000971      0x36b HAL_Driver/Src/stm32l1xx_hal_cortex.o
- .debug_abbrev  0x0000000000000cdc      0x289 HAL_Driver/Src/stm32l1xx_hal_gpio.o
- .debug_abbrev  0x0000000000000f65      0x2de HAL_Driver/Src/stm32l1xx_hal_i2c.o
- .debug_abbrev  0x0000000000001243      0x339 HAL_Driver/Src/stm32l1xx_hal_rcc.o
- .debug_abbrev  0x000000000000157c      0x2fa HAL_Driver/Src/stm32l1xx_hal_spi.o
- .debug_abbrev  0x0000000000001876      0x1ed HAL_Driver/Src/stm32l1xx_hal_spi_ex.o
- .debug_abbrev  0x0000000000001a63      0x2ed HAL_Driver/Src/stm32l1xx_hal_uart.o
- .debug_abbrev  0x0000000000001d50      0x205 Third_party/FreeRTOS/org/Source/list.o
- .debug_abbrev  0x0000000000001f55      0x386 Third_party/FreeRTOS/org/Source/tasks.o
- .debug_abbrev  0x00000000000022db      0x214 Third_party/FreeRTOS/org/Source/portable/GCC/ARM_CM3/port.o
- .debug_abbrev  0x00000000000024ef      0x273 Third_party/FreeRTOS/org/Source/portable/MemMang/heap_4.o
- .debug_abbrev  0x0000000000002762      0x27c src/main.o
- .debug_abbrev  0x00000000000029de      0x205 src/system_stm32l1xx.o
- .debug_abbrev  0x0000000000002be3       0x12 startup/startup_stm32l152xe.o
+ .debug_abbrev  0x0000000000000470      0x27d Drivers/src/spi.o
+ .debug_abbrev  0x00000000000006ed      0x293 Drivers/src/uart.o
+ .debug_abbrev  0x0000000000000980      0x36b HAL_Driver/Src/stm32l1xx_hal_cortex.o
+ .debug_abbrev  0x0000000000000ceb      0x289 HAL_Driver/Src/stm32l1xx_hal_gpio.o
+ .debug_abbrev  0x0000000000000f74      0x2de HAL_Driver/Src/stm32l1xx_hal_i2c.o
+ .debug_abbrev  0x0000000000001252      0x339 HAL_Driver/Src/stm32l1xx_hal_rcc.o
+ .debug_abbrev  0x000000000000158b      0x2fa HAL_Driver/Src/stm32l1xx_hal_spi.o
+ .debug_abbrev  0x0000000000001885      0x1ed HAL_Driver/Src/stm32l1xx_hal_spi_ex.o
+ .debug_abbrev  0x0000000000001a72      0x2ed HAL_Driver/Src/stm32l1xx_hal_uart.o
+ .debug_abbrev  0x0000000000001d5f      0x205 Third_party/FreeRTOS/org/Source/list.o
+ .debug_abbrev  0x0000000000001f64      0x386 Third_party/FreeRTOS/org/Source/tasks.o
+ .debug_abbrev  0x00000000000022ea      0x214 Third_party/FreeRTOS/org/Source/portable/GCC/ARM_CM3/port.o
+ .debug_abbrev  0x00000000000024fe      0x273 Third_party/FreeRTOS/org/Source/portable/MemMang/heap_4.o
+ .debug_abbrev  0x0000000000002771      0x27c src/main.o
+ .debug_abbrev  0x00000000000029ed      0x205 src/system_stm32l1xx.o
+ .debug_abbrev  0x0000000000002bf2       0x12 startup/startup_stm32l152xe.o
 
 .debug_aranges  0x0000000000000000      0xc18
  .debug_aranges
@@ -12693,7 +12693,7 @@ OUTPUT(Water_level.elf elf32-littlearm)
  .debug_ranges  0x0000000000000ac8       0x18 src/system_stm32l1xx.o
  .debug_ranges  0x0000000000000ae0       0x20 startup/startup_stm32l152xe.o
 
-.debug_macro    0x0000000000000000    0x1c518
+.debug_macro    0x0000000000000000    0x1c51e
  .debug_macro   0x0000000000000000      0x505 Drivers/src/i2c.o
  .debug_macro   0x0000000000000505      0xa72 Drivers/src/i2c.o
  .debug_macro   0x0000000000000f77      0x174 Drivers/src/i2c.o
@@ -12794,81 +12794,81 @@ OUTPUT(Water_level.elf elf32-littlearm)
  .debug_macro   0x0000000000018c23      0x505 Drivers/src/spi.o
  .debug_macro   0x0000000000019128       0x1c Drivers/src/spi.o
  .debug_macro   0x0000000000019144      0x505 Drivers/src/uart.o
- .debug_macro   0x0000000000019649       0x2e Drivers/src/uart.o
- .debug_macro   0x0000000000019677      0x413 HAL_Driver/Src/stm32l1xx_hal_cortex.o
- .debug_macro   0x0000000000019a8a      0x44c HAL_Driver/Src/stm32l1xx_hal_gpio.o
- .debug_macro   0x0000000000019ed6      0x461 HAL_Driver/Src/stm32l1xx_hal_i2c.o
- .debug_macro   0x000000000001a337      0x44f HAL_Driver/Src/stm32l1xx_hal_rcc.o
- .debug_macro   0x000000000001a786      0x419 HAL_Driver/Src/stm32l1xx_hal_spi.o
- .debug_macro   0x000000000001ab9f      0x413 HAL_Driver/Src/stm32l1xx_hal_spi_ex.o
- .debug_macro   0x000000000001afb2      0x414 HAL_Driver/Src/stm32l1xx_hal_uart.o
- .debug_macro   0x000000000001b3c6      0x18b Third_party/FreeRTOS/org/Source/list.o
- .debug_macro   0x000000000001b551      0x26c Third_party/FreeRTOS/org/Source/tasks.o
- .debug_macro   0x000000000001b7bd       0x17 Third_party/FreeRTOS/org/Source/tasks.o
- .debug_macro   0x000000000001b7d4      0x177 Third_party/FreeRTOS/org/Source/portable/GCC/ARM_CM3/port.o
- .debug_macro   0x000000000001b94b      0x1a6 Third_party/FreeRTOS/org/Source/portable/MemMang/heap_4.o
- .debug_macro   0x000000000001baf1      0x530 src/main.o
+ .debug_macro   0x0000000000019649       0x3a Drivers/src/uart.o
+ .debug_macro   0x0000000000019683      0x413 HAL_Driver/Src/stm32l1xx_hal_cortex.o
+ .debug_macro   0x0000000000019a96      0x44c HAL_Driver/Src/stm32l1xx_hal_gpio.o
+ .debug_macro   0x0000000000019ee2      0x461 HAL_Driver/Src/stm32l1xx_hal_i2c.o
+ .debug_macro   0x000000000001a343      0x44f HAL_Driver/Src/stm32l1xx_hal_rcc.o
+ .debug_macro   0x000000000001a792      0x419 HAL_Driver/Src/stm32l1xx_hal_spi.o
+ .debug_macro   0x000000000001abab      0x413 HAL_Driver/Src/stm32l1xx_hal_spi_ex.o
+ .debug_macro   0x000000000001afbe      0x414 HAL_Driver/Src/stm32l1xx_hal_uart.o
+ .debug_macro   0x000000000001b3d2      0x18b Third_party/FreeRTOS/org/Source/list.o
+ .debug_macro   0x000000000001b55d      0x26c Third_party/FreeRTOS/org/Source/tasks.o
+ .debug_macro   0x000000000001b7c9       0x17 Third_party/FreeRTOS/org/Source/tasks.o
+ .debug_macro   0x000000000001b7e0      0x177 Third_party/FreeRTOS/org/Source/portable/GCC/ARM_CM3/port.o
+ .debug_macro   0x000000000001b957      0x1a6 Third_party/FreeRTOS/org/Source/portable/MemMang/heap_4.o
+ .debug_macro   0x000000000001bafd      0x524 src/main.o
  .debug_macro   0x000000000001c021       0x16 src/main.o
  .debug_macro   0x000000000001c037       0x22 src/main.o
- .debug_macro   0x000000000001c059       0xa6 src/main.o
- .debug_macro   0x000000000001c0ff      0x419 src/system_stm32l1xx.o
+ .debug_macro   0x000000000001c059       0xac src/main.o
+ .debug_macro   0x000000000001c105      0x419 src/system_stm32l1xx.o
 
-.debug_line     0x0000000000000000     0xdac6
+.debug_line     0x0000000000000000     0xdad3
  .debug_line    0x0000000000000000      0xd57 Drivers/src/i2c.o
  .debug_line    0x0000000000000d57      0x4a8 Drivers/src/memory.o
- .debug_line    0x00000000000011ff      0xd6c Drivers/src/spi.o
- .debug_line    0x0000000000001f6b      0xdcf Drivers/src/uart.o
- .debug_line    0x0000000000002d3a      0xd3c HAL_Driver/Src/stm32l1xx_hal_cortex.o
- .debug_line    0x0000000000003a76      0xbda HAL_Driver/Src/stm32l1xx_hal_gpio.o
- .debug_line    0x0000000000004650     0x1a09 HAL_Driver/Src/stm32l1xx_hal_i2c.o
- .debug_line    0x0000000000006059     0x1225 HAL_Driver/Src/stm32l1xx_hal_rcc.o
- .debug_line    0x000000000000727e     0x1229 HAL_Driver/Src/stm32l1xx_hal_spi.o
- .debug_line    0x00000000000084a7      0xa4b HAL_Driver/Src/stm32l1xx_hal_spi_ex.o
- .debug_line    0x0000000000008ef2     0x108d HAL_Driver/Src/stm32l1xx_hal_uart.o
- .debug_line    0x0000000000009f7f      0x5ae Third_party/FreeRTOS/org/Source/list.o
- .debug_line    0x000000000000a52d     0x1024 Third_party/FreeRTOS/org/Source/tasks.o
- .debug_line    0x000000000000b551      0x630 Third_party/FreeRTOS/org/Source/portable/GCC/ARM_CM3/port.o
- .debug_line    0x000000000000bb81      0x670 Third_party/FreeRTOS/org/Source/portable/MemMang/heap_4.o
- .debug_line    0x000000000000c1f1      0xe01 src/main.o
- .debug_line    0x000000000000cff2      0xa57 src/system_stm32l1xx.o
- .debug_line    0x000000000000da49       0x7d startup/startup_stm32l152xe.o
+ .debug_line    0x00000000000011ff      0xd79 Drivers/src/spi.o
+ .debug_line    0x0000000000001f78      0xdcf Drivers/src/uart.o
+ .debug_line    0x0000000000002d47      0xd3c HAL_Driver/Src/stm32l1xx_hal_cortex.o
+ .debug_line    0x0000000000003a83      0xbda HAL_Driver/Src/stm32l1xx_hal_gpio.o
+ .debug_line    0x000000000000465d     0x1a09 HAL_Driver/Src/stm32l1xx_hal_i2c.o
+ .debug_line    0x0000000000006066     0x1225 HAL_Driver/Src/stm32l1xx_hal_rcc.o
+ .debug_line    0x000000000000728b     0x1229 HAL_Driver/Src/stm32l1xx_hal_spi.o
+ .debug_line    0x00000000000084b4      0xa4b HAL_Driver/Src/stm32l1xx_hal_spi_ex.o
+ .debug_line    0x0000000000008eff     0x108d HAL_Driver/Src/stm32l1xx_hal_uart.o
+ .debug_line    0x0000000000009f8c      0x5ae Third_party/FreeRTOS/org/Source/list.o
+ .debug_line    0x000000000000a53a     0x1024 Third_party/FreeRTOS/org/Source/tasks.o
+ .debug_line    0x000000000000b55e      0x630 Third_party/FreeRTOS/org/Source/portable/GCC/ARM_CM3/port.o
+ .debug_line    0x000000000000bb8e      0x670 Third_party/FreeRTOS/org/Source/portable/MemMang/heap_4.o
+ .debug_line    0x000000000000c1fe      0xe01 src/main.o
+ .debug_line    0x000000000000cfff      0xa57 src/system_stm32l1xx.o
+ .debug_line    0x000000000000da56       0x7d startup/startup_stm32l152xe.o
 
-.debug_str      0x0000000000000000    0xb1468
+.debug_str      0x0000000000000000    0xb1475
  .debug_str     0x0000000000000000    0xac038 Drivers/src/i2c.o
                                       0xac3ad (size before relaxing)
  .debug_str     0x00000000000ac038       0x40 Drivers/src/memory.o
                                        0x7d4d (size before relaxing)
  .debug_str     0x00000000000ac078      0x5f3 Drivers/src/spi.o
                                       0xac67e (size before relaxing)
- .debug_str     0x00000000000ac66b      0x334 Drivers/src/uart.o
-                                      0xac70d (size before relaxing)
- .debug_str     0x00000000000ac99f      0x424 HAL_Driver/Src/stm32l1xx_hal_cortex.o
+ .debug_str     0x00000000000ac66b      0x359 Drivers/src/uart.o
+                                      0xac732 (size before relaxing)
+ .debug_str     0x00000000000ac9c4      0x424 HAL_Driver/Src/stm32l1xx_hal_cortex.o
                                       0xa6a5a (size before relaxing)
- .debug_str     0x00000000000acdc3      0x230 HAL_Driver/Src/stm32l1xx_hal_gpio.o
+ .debug_str     0x00000000000acde8      0x230 HAL_Driver/Src/stm32l1xx_hal_gpio.o
                                       0xa64dd (size before relaxing)
- .debug_str     0x00000000000acff3      0xa48 HAL_Driver/Src/stm32l1xx_hal_i2c.o
+ .debug_str     0x00000000000ad018      0xa48 HAL_Driver/Src/stm32l1xx_hal_i2c.o
                                       0xa70c0 (size before relaxing)
- .debug_str     0x00000000000ada3b      0x536 HAL_Driver/Src/stm32l1xx_hal_rcc.o
+ .debug_str     0x00000000000ada60      0x536 HAL_Driver/Src/stm32l1xx_hal_rcc.o
                                       0xa6839 (size before relaxing)
- .debug_str     0x00000000000adf71      0x38b HAL_Driver/Src/stm32l1xx_hal_spi.o
+ .debug_str     0x00000000000adf96      0x38b HAL_Driver/Src/stm32l1xx_hal_spi.o
                                       0xa6952 (size before relaxing)
- .debug_str     0x00000000000ae2fc       0x29 HAL_Driver/Src/stm32l1xx_hal_spi_ex.o
+ .debug_str     0x00000000000ae321       0x29 HAL_Driver/Src/stm32l1xx_hal_spi_ex.o
                                       0xa65b7 (size before relaxing)
- .debug_str     0x00000000000ae325      0x374 HAL_Driver/Src/stm32l1xx_hal_uart.o
+ .debug_str     0x00000000000ae34a      0x374 HAL_Driver/Src/stm32l1xx_hal_uart.o
                                       0xa6929 (size before relaxing)
- .debug_str     0x00000000000ae699      0x189 Third_party/FreeRTOS/org/Source/list.o
+ .debug_str     0x00000000000ae6be      0x189 Third_party/FreeRTOS/org/Source/list.o
                                        0xaa47 (size before relaxing)
- .debug_str     0x00000000000ae822     0x1d91 Third_party/FreeRTOS/org/Source/tasks.o
+ .debug_str     0x00000000000ae847     0x1d91 Third_party/FreeRTOS/org/Source/tasks.o
                                        0xda8d (size before relaxing)
- .debug_str     0x00000000000b05b3      0x6ec Third_party/FreeRTOS/org/Source/portable/GCC/ARM_CM3/port.o
+ .debug_str     0x00000000000b05d8      0x6ec Third_party/FreeRTOS/org/Source/portable/GCC/ARM_CM3/port.o
                                        0x968b (size before relaxing)
- .debug_str     0x00000000000b0c9f      0x325 Third_party/FreeRTOS/org/Source/portable/MemMang/heap_4.o
+ .debug_str     0x00000000000b0cc4      0x325 Third_party/FreeRTOS/org/Source/portable/MemMang/heap_4.o
                                        0xbea2 (size before relaxing)
- .debug_str     0x00000000000b0fc4      0x403 src/main.o
-                                      0xacd39 (size before relaxing)
- .debug_str     0x00000000000b13c7       0x72 src/system_stm32l1xx.o
+ .debug_str     0x00000000000b0fe9      0x3eb src/main.o
+                                      0xacd46 (size before relaxing)
+ .debug_str     0x00000000000b13d4       0x72 src/system_stm32l1xx.o
                                       0xa62c6 (size before relaxing)
- .debug_str     0x00000000000b1439       0x2f startup/startup_stm32l152xe.o
+ .debug_str     0x00000000000b1446       0x2f startup/startup_stm32l152xe.o
                                          0x6d (size before relaxing)
 
 .comment        0x0000000000000000       0x7f

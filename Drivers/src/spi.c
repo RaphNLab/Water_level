@@ -102,7 +102,15 @@ void spiDevConfig(SpiDev_T *spiDev, SPI_HandleTypeDef *hspi, uint8_t *rxBuffer, 
 
 void spiSendCmd(SpiDev_T *spiDev, uint8_t *rxBuffer, uint8_t size)
 {
+	uint8_t i = 0;
+	while(i < size)
+	{
+		while(!(spiDev->spi->Instance->DR & SPI_FLAG_RXNE));
+		rxBuffer[i] = (spiDev->spi->Instance->DR &  0xFF);
+		i++;
 
+		//HAL_SPI_Receive();
+	}
 }
 
 void spiGetData(SpiDev_T *spiDev, uint8_t *txBuffer, uint8_t size)

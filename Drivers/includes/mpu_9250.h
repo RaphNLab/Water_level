@@ -10,6 +10,8 @@
 
 #include "global.h"
 
+
+#define PWR_MGMT_1 		0x6B
 #define XG_OFFSET_H		0x13
 #define XG_OFFSET_L		0x14
 #define YG_OFFSET_H		0x15
