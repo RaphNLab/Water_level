@@ -99,17 +99,12 @@ void i2cDevConfig(I2cDev_T *i2cDev, I2C_HandleTypeDef *hi2c, uint8_t *rxBuffer, 
 }
 
 
-void i2c_send_cmd(I2cDev_T *i2cDev, uint8_t *rxbuffer, uint8_t size)
+void i2c_Xfer(I2cDev_T *i2cDev, uint8_t *rxbuffer, uint8_t size)
 {
 	//HAL_SPI_Transmit(&hspi1, &temp_data, 1, 100);
 	//HAL_SPI_Receive(&hspi1, data, len, 100);
 	//HAL_I2C_Master_Transmit();
 	//i2cDev->hi2c->Instance->SR1 &
-}
-
-void i2c_get_data(I2cDev_T *i2cDev, uint8_t *txBuffer, uint8_t size)
-{
-
 }
 
 

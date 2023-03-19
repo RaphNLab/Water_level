@@ -10,7 +10,6 @@
 uint8_t uartRxBuffer[10];
 uint8_t uartTxBuffer[10];
 UartDev_T uartDev;
-uint8_t uartLedBuffer[4] = {1, 2, 3, 4};
 UART_HandleTypeDef huart2;
 
 
@@ -27,7 +26,7 @@ char *uartCmdList[] =
 	AT_LED(5, EIN),
 	AT_LED(5, AUS),
 	AT_LED(6, EIN),
-	AT_LED(6, AUS),
+	AT_LED(6, AUS)
 };
 
 
@@ -73,7 +72,7 @@ void uartGpioSetup(void)
 	gpio_uart.Alternate = GPIO_AF7_USART2;
 	HAL_GPIO_Init(GPIOA, &gpio_uart);
 
-	gpio_led.Pin = (GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6);
+	gpio_led.Pin = (GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6); // LED 3 must be configured as well
 	gpio_led.Mode = GPIO_MODE_OUTPUT_PP;
 	gpio_led.Pull = GPIO_NOPULL;
 	gpio_led.Speed = GPIO_SPEED_FREQ_LOW;
@@ -229,7 +228,6 @@ void USART2_IRQHandler(void)
 		}
 	}
 }
-
 
 
 

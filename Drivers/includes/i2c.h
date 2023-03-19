@@ -33,8 +33,9 @@ void i2cGpioSetup(void);
 void i2cHardwareSetup(void);
 
 void i2cDevConfig(I2cDev_T *i2cDev, I2C_HandleTypeDef *hi2c, uint8_t *rxBuffer, uint8_t *txBuffer, uint8_t size);
-void i2cSendCmd(I2cDev_T *i2cDev, uint8_t *rxBuffer, uint8_t size);
-void i2cGetData(I2cDev_T *i2cDev, uint8_t *txBuffer, uint8_t size);
+void i2c_Xfer(I2cDev_T *i2cDev, uint8_t *rxBuffer, uint8_t size);
+
+//void i2cGetData(I2cDev_T *i2cDev, uint8_t *txBuffer, uint8_t size);
 
 
 #endif /* INCLUDES_I2C_H_ */

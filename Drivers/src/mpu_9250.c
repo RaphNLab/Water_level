@@ -9,7 +9,29 @@
 
 
 
-void MPU_9250WhoAmI(void)
+HAL_StatusTypeDef MPU_9250WhoAmI(uint8_t *reg)
+{
+	/*HAL_StatusTypeDef retVal = HAL_ERROR;
+	reg[0] = (uint8_t)WHO_AM_I;
+
+	retVal =  HAL_I2C_Master_Transmit(&hi2c1, MPU9250_ADDR, reg, 1, HAL_MAX_DELAY);
+	if(retVal == HAL_ERROR)
+	{
+		//Report error while writing
+	}
+	else
+	{
+		retVal = HAL_I2C_Master_Receive(&hi2c1, MPU9250_ADDR, reg[0], 1, HAL_MAX_DELAY);
+		if(retVal == HAL_ERROR)
+		{
+			//Report error while reading
+		}
+	}
+	return retVal;*/
+}
+
+
+void MPU_9250Init(void)
 {
 
 }

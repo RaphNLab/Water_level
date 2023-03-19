@@ -56,7 +56,6 @@ typedef struct
 	uint8_t size;
 }UartDev_T;
 
-extern uint8_t uartLedBuffer[4];
 extern uint8_t uartRxBuffer[10];
 extern uint8_t uartTxBuffer[10];
 extern UART_HandleTypeDef huart2;

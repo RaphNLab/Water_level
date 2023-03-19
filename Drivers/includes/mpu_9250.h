@@ -39,7 +39,11 @@
 
 #define WHO_AM_I		0x75
 
-void MPU_9250WhoAmI(void);
+#define MPU9250_ADDR 	(0x68 << 1)
+
+
+HAL_StatusTypeDef MPU_9250WhoAmI(uint8_t *reg);
+void MPU_9250Init(void);
 void MPU_9250GetTemp(float *temp);
 
 void MPU_9250GetAccAxis(uint8_t *xAxis, uint8_t *yAxis, uint8_t *zAxis);

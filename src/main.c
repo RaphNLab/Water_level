@@ -14,20 +14,42 @@
 #include "spi.h"
 #include "mpu_9250.h"
 
-TaskHandle_t xTaskHandle1 = NULL;
-TaskHandle_t xTaskHandle2 = NULL;
 
+
+typedef enum
+{
+	ACCELEROMETER_TASK = 0,
+	GYROSCOPE_TASK,
+	TEMPERATURE_TASK,
+	DEFAULT_TASK
+}TaskType_T;
+
+#define LED_DELAY_1_S 		1000
+#define LED_DELAY_500_MS	500
+
+uint16_t ledDelay = 0;
+uint8_t notify = 0;
+
+TaskHandle_t xledTaskHandle = NULL;
+TaskHandle_t xaccTaskHandle = NULL;
+TaskHandle_t xtempTaskHandle = NULL;
+TaskHandle_t xtimerTaskHandle = NULL;
+TaskHandle_t xuartTaskHandle = NULL;
+
+TaskType_T taskType = DEFAULT_TASK;
 
 /* functions prototypes */
-void vApplicationTickHook(void);
 
-void vTaskHandler(void *params);
+
 void vLedTaskHandler(void *params);
-void vUartCmadTaskHandler(void *params);
+void vAccTaskHandler(void *params);
+void vTempTaskHandler(void *params);
+void vUartCmdTaskHandler(void *params);
 void vUartHandleCmd(UartDev_T *uartDev);
+
 void SystemClock_Config(void);
 void Error_Handler(void);
-
+void rtosDelay(uint16_t delay);
 
 int main(void)
 {
@@ -40,7 +62,7 @@ int main(void)
 	SystemCoreClockUpdate();
 
 	uartDevConfig(&uartDev, &huart2, uartRxBuffer, uartTxBuffer, 0);
-	i2cDevConfig(&i2cDev, &hi2c1, i2cRxBuffer, i2cTxBuffer, 0);
+	i2cHardwareSetup();
 	spiDevConfig(&spiDev, &hspi1, spiRxBuffer, spiTxBuffer, 0);
 
 	/* Create 2 task with the same priority */
@@ -48,8 +70,10 @@ int main(void)
 
 	//xTaskCreate(vTaskHandler, "Send string", configMINIMAL_STACK_SIZE, (void *)"Hello From task 2\r\n", 2, &xTaskHandle2);
 
-	xTaskCreate(vUartCmadTaskHandler, "Command handler", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
-	//xTaskCreate(vLedTaskHandler, "LED Task", configMINIMAL_STACK_SIZE, (void *)"1000", 1, NULL);
+	xTaskCreate(vUartCmdTaskHandler, "Command handler", 500, NULL, 2, &xuartTaskHandle);
+	xTaskCreate(vLedTaskHandler, "LED Task", 500, NULL, 2, &xledTaskHandle);
+
+
 	//xTaskCreate(vLedTaskHandler, "LED Task", configMINIMAL_STACK_SIZE, (void *)"500", 1, NULL);
 
 	/* Start the scheduler: This function will never return */
@@ -59,74 +83,148 @@ int main(void)
 }
 
 
-void vUartCmadTaskHandler(void *params)
+void vLedTaskHandler(void *params){
+
+	TickType_t xDelayMs = 0;
+
+	// Select the LED delay depending on the task type
+	switch(taskType)
+	{
+	case TEMPERATURE_TASK:
+		xDelayMs = pdMS_TO_TICKS(ledDelay);
+		break;
+	case ACCELEROMETER_TASK:
+		xDelayMs = pdMS_TO_TICKS(ledDelay);
+		break;
+	default:
+		xDelayMs = pdMS_TO_TICKS(50);
+	}
+
+
+	while(1)
+	{
+		// Start toggleling if notification comes from uart task
+		if(notify)
+		{
+			HAL_GPIO_TogglePin(GPIOA, LED5_PIN);
+			vTaskDelay(ledDelay);
+		}
+	}
+}
+
+void vAccTaskHandler(void *params)
+{
+	while(1)
+	{
+
+	}
+}
+
+void vTempTaskHandler(void *params)
+{
+	while(1)
+	{
+
+	}
+}
+
+
+void vUartCmdTaskHandler(void *params)
 {
 	while(1)
 	{
 		vUartHandleCmd(&uartDev);
-		vUartHandleCmd(&uartDev);
 	}
 }
+
 
 void vUartHandleCmd(UartDev_T *uartDev)
 {
 	if(uartDev->uartRxFlag == UART_RX_CMP)
 	{
-		if((strncmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_GET_TEMP], uartDev->size)) == 0)
+		if((strncasecmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_GET_TEMP], uartDev->size)) == 0)
 		{
 			// Call Temperature task
 			// Blink LED 1/2 second
+			ledDelay = 25;
+			notify = 1;
+			taskType = TEMPERATURE_TASK;
+			xTaskNotify(xledTaskHandle, 0, eNoAction);
+
 		}
-		else if((strncmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_GET_ACC], uartDev->size)) == 0)
+		else if((strncasecmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_GET_ACC], uartDev->size)) == 0)
 		{
 			// Call accelerometer
 			// Print angle every 2 seconds
 			// Turn LED every 1 second
+			ledDelay = 50;
+			notify = 1;
+			taskType = ACCELEROMETER_TASK;
+			xTaskNotify(xledTaskHandle, 0, eNoAction);
+
 		}
-		else if((strncmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_LED_3_OFF], uartDev->size)) == 0)
+		else if((strncasecmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_LED_3_ON], uartDev->size)) == 0)
 		{
 			// Torn on LED
 			HAL_GPIO_WritePin(GPIOA, LED3_PIN, GPIO_PIN_SET);
+			notify = 0;
+			taskType = DEFAULT_TASK;
 		}
-		else if((strncmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_LED_3_ON], uartDev->size)) == 0)
+		else if((strncasecmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_LED_3_OFF], uartDev->size)) == 0)
 		{
 			// Turn off led
 			HAL_GPIO_WritePin(GPIOA, LED3_PIN, GPIO_PIN_RESET);
+			notify = 0;
+			taskType = DEFAULT_TASK;
 		}
-		else if((strncmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_LED_4_OFF], uartDev->size)) == 0)
+		else if((strncasecmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_LED_4_ON], uartDev->size)) == 0)
 		{
 			// Torn on LED
 			HAL_GPIO_WritePin(GPIOA, LED4_PIN, GPIO_PIN_SET);
+			notify = 0;
+			taskType = DEFAULT_TASK;
 		}
-		else if((strncmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_LED_4_ON], uartDev->size)) == 0)
+		else if((strncasecmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_LED_4_OFF], uartDev->size)) == 0)
 		{
 			// Turn off led
 			HAL_GPIO_WritePin(GPIOA, LED4_PIN, GPIO_PIN_RESET);
+			notify = 0;
+			taskType = DEFAULT_TASK;
 		}
-		else if((strncmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_LED_5_OFF], uartDev->size)) == 0)
+		else if((strncasecmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_LED_5_ON], uartDev->size)) == 0)
 		{
 			// Torn on LED
 			HAL_GPIO_WritePin(GPIOA, LED5_PIN, GPIO_PIN_SET);
+			notify = 0;
+			taskType = DEFAULT_TASK;
 		}
-		else if((strncmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_LED_5_ON], uartDev->size)) == 0)
+		else if((strncasecmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_LED_5_OFF], uartDev->size)) == 0)
 		{
 			// Turn off led
 			HAL_GPIO_WritePin(GPIOA, LED5_PIN, GPIO_PIN_RESET);
+			notify = 0;
+			taskType = DEFAULT_TASK;
 		}
-		else if((strncmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_LED_6_OFF], uartDev->size)) == 0)
+		else if((strncasecmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_LED_6_ON], uartDev->size)) == 0)
 		{
 			// Torn on LED
 			HAL_GPIO_WritePin(GPIOA, LED6_PIN, GPIO_PIN_SET);
+			notify = 0;
+			taskType = DEFAULT_TASK;
 		}
-		else if((strncmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_LED_6_ON], uartDev->size)) == 0)
+		else if((strncasecmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_LED_6_OFF], uartDev->size)) == 0)
 		{
 			// Turn off led
 			HAL_GPIO_WritePin(GPIOA, LED6_PIN, GPIO_PIN_RESET);
+			notify = 0;
+			taskType = DEFAULT_TASK;
 		}
 		else
 		{
 			// Report invalid command
 			uartSendStr(uartDev, (uint8_t *)"Invalid CMD\r\n", strlen((const char*)"Invalid CMD\r\n"));
+			notify = 0;
+			taskType = DEFAULT_TASK;
 		}
 		// Reset the flag
 		uartDev->uartRxFlag = UART_NO_RX;
@@ -134,42 +232,12 @@ void vUartHandleCmd(UartDev_T *uartDev)
 	}
 }
 
-
-void vLedTaskHandler(void *params){
-
-	uint16_t delay;
-	char *param;
-	param = (char *)params;
-	delay = atoi(param);
-
-	const TickType_t xDelay250ms = pdMS_TO_TICKS(delay);
-
-	while(1)
-	{
-		HAL_GPIO_TogglePin(GPIOA, LED5_PIN);
-		vTaskDelay(xDelay250ms);
-	}
-}
-
-
-void vTaskHandler(void *params)
+void rtosDelay(uint16_t delay)
 {
-	const TickType_t xDelay250ms = pdMS_TO_TICKS(250);
-
-	unsigned char *pcTaskName;
-	pcTaskName = (unsigned char *)params;
-	while(1)
-	{
-		//uartPuts(pcTaskName);
-		//uartSendStr(&uartDev, pcTaskName, strlen((const char*)pcTaskName));
-
-		vTaskDelay(xDelay250ms);
-	}
-}
-
-void vApplicationTickHook(void)
-{
-
+	uint16_t currentDelay = xTaskGetTickCount();
+	// Get the tick value corresponding to the delay in ms
+	uint16_t delayInTick = (currentDelay * configTICK_RATE_HZ )/1000;
+	while(xTaskGetTickCount() < (currentDelay + delayInTick));
 }
 
 
