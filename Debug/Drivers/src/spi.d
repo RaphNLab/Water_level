@@ -64,7 +64,9 @@ Drivers/src/spi.o: ../Drivers/src/spi.c \
  /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Utilities/STM32L1xx_Nucleo/stm32l1xx_nucleo.h \
  /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Drivers/includes/memory.h \
  /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Third_party/FreeRTOS/org/Source/include/task.h \
- /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Third_party/FreeRTOS/org/Source/include/list.h
+ /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Third_party/FreeRTOS/org/Source/include/list.h \
+ /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Third_party/FreeRTOS/org/Source/include/timers.h \
+ /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Third_party/FreeRTOS/org/Source/include/task.h
 
 /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Drivers/includes/spi.h:
 
@@ -197,3 +199,7 @@ Drivers/src/spi.o: ../Drivers/src/spi.c \
 /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Third_party/FreeRTOS/org/Source/include/task.h:
 
 /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Third_party/FreeRTOS/org/Source/include/list.h:
+
+/home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Third_party/FreeRTOS/org/Source/include/timers.h:
+
+/home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Third_party/FreeRTOS/org/Source/include/task.h:

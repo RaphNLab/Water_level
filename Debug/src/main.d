@@ -64,6 +64,8 @@ src/main.o: ../src/main.c \
  /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Drivers/includes/memory.h \
  /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Third_party/FreeRTOS/org/Source/include/task.h \
  /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Third_party/FreeRTOS/org/Source/include/list.h \
+ /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Third_party/FreeRTOS/org/Source/include/timers.h \
+ /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Third_party/FreeRTOS/org/Source/include/task.h \
  /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Drivers/includes/uart.h \
  /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Drivers/includes/global.h \
  /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Drivers/includes/i2c.h \
@@ -199,6 +201,10 @@ src/main.o: ../src/main.c \
 /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Third_party/FreeRTOS/org/Source/include/task.h:
 
 /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Third_party/FreeRTOS/org/Source/include/list.h:
+
+/home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Third_party/FreeRTOS/org/Source/include/timers.h:
+
+/home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Third_party/FreeRTOS/org/Source/include/task.h:
 
 /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Drivers/includes/uart.h:
 

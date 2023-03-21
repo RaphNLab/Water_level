@@ -77,4 +77,7 @@ void uartSendStr(UartDev_T *uartDev, uint8_t *txBuffer, uint8_t size);
 void uartSendC(UartDev_T *uartDev, uint8_t c);
 
 
+void pPrintf(const char *fmt, ...);
+void vPrint(const char *fmt, va_list argp);
+
 #endif /* INCLUDES_UART_H_ */

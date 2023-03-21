@@ -14,11 +14,19 @@
 #include "memory.h"
 
 #include "task.h"
+#include "timers.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
+#include <stdarg.h>
 
 
+typedef enum
+{
+	FALSE = 0,
+	TRUE
+}Bool_T;
 
 
 #endif /* INCLUDES_GLOBAL_H_ */

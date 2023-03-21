@@ -230,5 +230,31 @@ void USART2_IRQHandler(void)
 }
 
 
+void vPrint(const char *fmt, va_list argp)
+{
+  char string[200];
+  char ret = '\r';
+  char *p = string;
 
+  if(0 < vsprintf(string,fmt,argp)) // build string
+  {
+    while(*p != '\n')
+    {
+    	uartSendC(&uartDev, (uint8_t)*(p++));
+    }
+    //CR
+    uartSendC(&uartDev, (uint8_t)ret);
+    uartSendC(&uartDev, (uint8_t)'\n');
+  }
+}
+
+// This is a custum printf function
+
+void pPrintf(const char *fmt, ...)
+{
+    va_list argp;
+    va_start(argp, fmt);
+    vPrint(fmt, argp);
+    va_end(argp);
+}
 

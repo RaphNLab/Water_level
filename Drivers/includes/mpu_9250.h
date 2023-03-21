@@ -44,7 +44,7 @@
 #define MPU9250_ADDR 	(0x68 << 1)
 
 
-HAL_StatusTypeDef MPU_9250WhoAmI(uint8_t *reg);
+uint8_t MPU_9250WhoAmI(void);
 void MPU_9250Init(void);
 void MPU_9250GetTemp(float *temp);
 

@@ -99,23 +99,103 @@ void spiDevConfig(SpiDev_T *spiDev, SPI_HandleTypeDef *hspi, uint8_t *rxBuffer, 
 	}
 }
 
-
-void spiSendCmd(SpiDev_T *spiDev, uint8_t *rxBuffer, uint8_t size)
+/*!
+	* Send data over SPI
+*/
+void spiSend(SpiDev_T *spiDev, uint8_t *txBuffer, uint8_t size)
 {
-	uint8_t i = 0;
-	while(i < size)
+	if(SPI_MODE_SLAVE == spiDev->spi->Init.Mode)
 	{
-		while(!(spiDev->spi->Instance->DR & SPI_FLAG_RXNE));
-		rxBuffer[i] = (spiDev->spi->Instance->DR &  0xFF);
-		i++;
+		//Send dummy by to activate clock for slave
+	spiDev->spi->Instance->DR = *txBuffer;
+	}
 
-		//HAL_SPI_Receive();
+	for(uint8_t i = 0U; i < size; i++)
+	{
+		while(!(spiDev->spi->Instance->SR & SPI_SR_TXE));
+		spiDev->spi->Instance->DR = txBuffer[i];
+
+		// Wait for the BSY bit of the status register to become false
+		while((spiDev->spi->Instance->SR & SPI_SR_BSY));
 	}
 }
 
-void spiGetData(SpiDev_T *spiDev, uint8_t *txBuffer, uint8_t size)
+/*!
+	* Receive data over SPI
+*/
+void spiReceive(SpiDev_T *spiDev, uint8_t *rxBuffer, uint8_t size)
 {
+	if(SPI_MODE_SLAVE == spiDev->spi->Init.Mode)
+	{
+		//Send dummy by to activate clock
+		spiSendReceive(spiDev, rxBuffer, rxBuffer, size);
+	}
+	else
+	{
+		for(uint8_t i = 0U; i < size; i++)
+		{
+			while(!(spiDev->spi->Instance->SR & SPI_SR_RXNE)); // Wait for the RX bit of the register to become empty
+			rxBuffer[i] = spiDev->spi->Instance->DR; // Read one byte from DR
 
+			// Wait for the BSY bit of the status register to become false
+			while((spiDev->spi->Instance->SR & SPI_SR_BSY));
+		}
+	}
+}
+
+/*!
+	*Send and receive each byte sent over SPI in blocking mode
+*/
+Bool_T spiSendReceive(SpiDev_T *spiDev, uint8_t *txBuffer, uint8_t *rxBuffer, uint16_t size)
+{
+	Bool_T ret_val = FALSE;
+
+	if(0U == size)
+	{
+		// Report size too small
+	}
+	else if(NULL == txBuffer)
+	{
+		// Report tx_buffer not initialized
+	}
+	else if(NULL == rxBuffer)
+	{
+		// Report rx_buffer not initialized
+	}
+
+	else
+	{
+		if(spiDev->spi->Init.Mode == SPI_MODE_SLAVE)
+		{
+			spiDev->spi->Instance->DR = *txBuffer; // Write dummy byte to enable clock for slave
+		}
+
+		int tx_allowed = 1U;
+		for(uint8_t i = 0U; i < size; i++)
+		{
+			// Transmit each byte
+			while((!(spiDev->spi->Instance->SR & SPI_SR_TXE)) && !tx_allowed);
+			spiDev->spi->Instance->DR = txBuffer[i];
+			tx_allowed = 0U;
+
+			// Receive each byte
+			while(!(spiDev->spi->Instance->SR & SPI_SR_RXNE)); // Wait for the RX bit of the register to become empty
+			rxBuffer[i] = spiDev->spi->Instance->DR; // Read one byte from DR
+			tx_allowed = 1U;
+
+			if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_12))
+			{
+				break;
+			}
+		}
+		if(spiDev->spi->Init.Mode == SPI_MODE_MASTER)
+		{
+			// Wait for the BSY bit of the status register to become false
+			while((spiDev->spi->Instance->SR & SPI_SR_BSY));
+		}
+		ret_val = TRUE;
+	}
+	return ret_val;
 }
 
 

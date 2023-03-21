@@ -27,12 +27,21 @@ typedef enum
 
 uint16_t ledDelay = 0;
 uint8_t notify = 0;
+uint8_t devAddr = 0;
+Bool_T accTimerFlag = FALSE;
+Bool_T tempTimerFlag = FALSE;
+
+const TickType_t tempTaskDelay = 10000 / portTICK_PERIOD_MS;
+const TickType_t accTaskDelay = 2000 / portTICK_PERIOD_MS;
 
 TaskHandle_t xledTaskHandle = NULL;
+TaskHandle_t xuartTaskHandle = NULL;
 TaskHandle_t xaccTaskHandle = NULL;
 TaskHandle_t xtempTaskHandle = NULL;
+
 TaskHandle_t xtimerTaskHandle = NULL;
-TaskHandle_t xuartTaskHandle = NULL;
+TimerHandle_t xAccTimerHandle = NULL;
+TimerHandle_t xTempTimerHandle = NULL;
 
 TaskType_T taskType = DEFAULT_TASK;
 
@@ -40,10 +49,12 @@ TaskType_T taskType = DEFAULT_TASK;
 
 
 void vLedTaskHandler(void *params);
-void vAccTaskHandler(void *params);
-void vTempTaskHandler(void *params);
 void vUartCmdTaskHandler(void *params);
 void vUartHandleCmd(UartDev_T *uartDev);
+void vAccTaskHandler(void *params);
+void vTempTaskHandler(void *params);
+void accTaskCallback(TimerHandle_t xTimer);
+void tempTaskCallback(TimerHandle_t xTimer);
 
 void SystemClock_Config(void);
 void Error_Handler(void);
@@ -63,17 +74,21 @@ int main(void)
 	i2cHardwareSetup();
 	spiDevConfig(&spiDev, &hspi1, spiRxBuffer, spiTxBuffer, 0);
 
-	/* Create 2 task with the same priority */
-	//xTaskCreate(vTaskHandler, "Task 1", configMINIMAL_STACK_SIZE, (void *)"Hello From task 1\r\n", 1, &xTaskHandle1);
-
-	//xTaskCreate(vTaskHandler, "Send string", configMINIMAL_STACK_SIZE, (void *)"Hello From task 2\r\n", 2, &xTaskHandle2);
-
 	xTaskCreate(vUartCmdTaskHandler, "Command handler", 500, NULL, 2, &xuartTaskHandle);
 	xTaskCreate(vLedTaskHandler, "LED Task", 500, NULL, 2, &xledTaskHandle);
 
+	xTaskCreate(vAccTaskHandler, "Accelerometer task", 500, NULL, 2, &xaccTaskHandle);
+	xTaskCreate(vTempTaskHandler, "Temperature task", 500, NULL, 2, &xtempTaskHandle);
 
-	//xTaskCreate(vLedTaskHandler, "LED Task", configMINIMAL_STACK_SIZE, (void *)"500", 1, NULL);
+	xTempTimerHandle = xTimerCreate(
+	                      "Temperature Task timer",     // Name of timer
+						  tempTaskDelay,            // Period of timer (in ticks)
+	                      pdTRUE,              // Auto-reload
+	                      (void *)0,            // Timer ID
+						  tempTaskCallback);  // Callback function
 
+	//Start the timer
+	xTimerStart(xTempTimerHandle, portMAX_DELAY);
 	/* Start the scheduler: This function will never return */
 	vTaskStartScheduler();
 
@@ -81,24 +96,8 @@ int main(void)
 }
 
 
-void vLedTaskHandler(void *params){
-
-	TickType_t xDelayMs = 0;
-
-	// Select the LED delay depending on the task type
-	switch(taskType)
-	{
-	case TEMPERATURE_TASK:
-		xDelayMs = pdMS_TO_TICKS(ledDelay);
-		break;
-	case ACCELEROMETER_TASK:
-		xDelayMs = pdMS_TO_TICKS(ledDelay);
-		break;
-	default:
-		xDelayMs = pdMS_TO_TICKS(50);
-	}
-
-
+void vLedTaskHandler(void *params)
+{
 	while(1)
 	{
 		// Start toggleling if notification comes from uart task
@@ -110,23 +109,69 @@ void vLedTaskHandler(void *params){
 	}
 }
 
+/* This function handle the watermeter task command*/
 void vAccTaskHandler(void *params)
 {
+	uint8_t accXAxis = 0;
+	uint8_t accYAxis = 0;
+	uint8_t accZAxis = 0;
+
 	while(1)
 	{
+		if(notify)
+		{
 
+			if(accTimerFlag)
+			{
+				MPU_9250GetAccAxis(&accXAxis, &accYAxis, &accZAxis);
+				pPrintf("MPU9250 Accelerometer X Axis: %d \n", accXAxis);
+				pPrintf("MPU9250 Accelerometer Y Axis: %d \n", accYAxis);
+				pPrintf("MPU9250 Accelerometer Z Axis: %d \n", accZAxis);
+			}
+			accTimerFlag = FALSE;
+		}
 	}
 }
 
+/* callback to notify timer overflow
+ * When the 2s are reached
+ * */
+void accTaskCallback(TimerHandle_t xTimer)
+{
+	accTimerFlag = TRUE;
+}
+
+/* This function handle the temperature task command*/
 void vTempTaskHandler(void *params)
 {
+	float temperature = 0.0;
 	while(1)
 	{
+		if(notify)
+		{
+			devAddr = MPU_9250WhoAmI();
+			if(tempTimerFlag)
+			{
+				MPU_9250GetTemp(&temperature);
+				pPrintf("MPU9250 Temperature: %d°C\n", (uint8_t)temperature);
+			}
 
+			tempTimerFlag = FALSE;
+		}
 	}
 }
 
+/* callback to notify timer overflow
+ * When the 10s are reached
+ * */
+void tempTaskCallback(TimerHandle_t xTimer)
+{
+	tempTimerFlag = TRUE;
+}
 
+
+
+/* Handles incoming commands over uart */
 void vUartCmdTaskHandler(void *params)
 {
 	while(1)
@@ -134,7 +179,6 @@ void vUartCmdTaskHandler(void *params)
 		vUartHandleCmd(&uartDev);
 	}
 }
-
 
 void vUartHandleCmd(UartDev_T *uartDev)
 {

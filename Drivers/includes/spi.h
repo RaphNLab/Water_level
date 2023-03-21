@@ -35,7 +35,8 @@ void spiGpioSetup(void);
 void spiHardwareSetup(void);
 
 void spiDevConfig(SpiDev_T *spiDev, SPI_HandleTypeDef *hspi, uint8_t *rxBuffer, uint8_t *txBuffer, uint8_t size);
-void spiSendCmd(SpiDev_T *spiDev, uint8_t *rxBuffer, uint8_t size);
-void spiGetData(SpiDev_T *spiDev, uint8_t *txBuffer, uint8_t size);
+void spiSend(SpiDev_T *spiDev, uint8_t *rxBuffer, uint8_t size);
+void spiReceive(SpiDev_T *spiDev, uint8_t *txBuffer, uint8_t size);
+Bool_T spiSendReceive(SpiDev_T *spiDev, uint8_t *txBuffer, uint8_t *rxBuffer, uint16_t size);
 
 #endif /* INCLUDES_SPI_H_ */
