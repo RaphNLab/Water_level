@@ -71,13 +71,13 @@ int main(void)
 	SystemCoreClockUpdate();
 
 	uartDevConfig(&uartDev, &huart2, uartRxBuffer, uartTxBuffer, 0);
-	i2cHardwareSetup();
+	i2cDevConfig(&i2cDev, &hi2c1);
 	spiDevConfig(&spiDev, &hspi1, spiRxBuffer, spiTxBuffer, 0);
 
 	xTaskCreate(vUartCmdTaskHandler, "Command handler", 500, NULL, 2, &xuartTaskHandle);
 	xTaskCreate(vLedTaskHandler, "LED Task", 500, NULL, 2, &xledTaskHandle);
 
-	xTaskCreate(vAccTaskHandler, "Accelerometer task", 500, NULL, 2, &xaccTaskHandle);
+	//xTaskCreate(vAccTaskHandler, "Accelerometer task", 500, NULL, 2, &xaccTaskHandle);
 	xTaskCreate(vTempTaskHandler, "Temperature task", 500, NULL, 2, &xtempTaskHandle);
 
 	xTempTimerHandle = xTimerCreate(
@@ -120,10 +120,9 @@ void vAccTaskHandler(void *params)
 	{
 		if(notify)
 		{
-
 			if(accTimerFlag)
 			{
-				MPU_9250GetAccAxis(&accXAxis, &accYAxis, &accZAxis);
+				MPU9250GetAccAxis(&accXAxis, &accYAxis, &accZAxis);
 				pPrintf("MPU9250 Accelerometer X Axis: %d \n", accXAxis);
 				pPrintf("MPU9250 Accelerometer Y Axis: %d \n", accYAxis);
 				pPrintf("MPU9250 Accelerometer Z Axis: %d \n", accZAxis);
@@ -149,11 +148,13 @@ void vTempTaskHandler(void *params)
 	{
 		if(notify)
 		{
-			devAddr = MPU_9250WhoAmI();
+			//devAddr = MPU9250WhoAmI();
+
 			if(tempTimerFlag)
 			{
-				MPU_9250GetTemp(&temperature);
+				MPU9250GetTemp(&temperature);
 				pPrintf("MPU9250 Temperature: %d°C\n", (uint8_t)temperature);
+				//pPrintf("MPU9250 ADDR: 0x%X\n", (uint8_t)devAddr);
 			}
 
 			tempTimerFlag = FALSE;

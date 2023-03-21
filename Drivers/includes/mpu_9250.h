@@ -10,8 +10,6 @@
 
 #include "global.h"
 
-
-#define PWR_MGMT_1 		0x6B
 #define XG_OFFSET_H		0x13
 #define XG_OFFSET_L		0x14
 #define YG_OFFSET_H		0x15
@@ -19,11 +17,15 @@
 #define ZG_OFFSET_H		0x17
 #define ZG_OFFSET_L		0x18
 
-#define GYRO_CONFIG		0x1B
-#define ACCEL_CONFIG	0x1C
-#define ACCEL_CONFIG_2	0x1D
+#define SMPLRT_DIV      0x19
+#define CONFIG          0x1A
+#define GYRO_CONFIG     0x1B
+#define ACCEL_CONFIG    0x1C
+#define ACCEL_CONFIG2   0x1D
 #define LP_ACCEL_ODR	0x1E
 
+#define FIFO_EN         0x23
+#define INT_ENABLE      0x38
 #define ACCEL_XOUT_H	0x3B
 #define ACCEL_XOUT_L	0x3C
 #define ACCEL_YOUT_H	0x3D
@@ -39,17 +41,34 @@
 #define GYRO_ZOUT_H		0x47
 #define GYRO_ZOUT_L		0x48
 
+#define USER_CTRL       0x6A
+#define PWR_MGMT_2      0x6C
+#define PWR_MGMT_1 		0x6B
+
+#define FIFO_COUNTH     0x72
+#define FIFO_COUNTL     0x73
+#define FIFO_R_W        0x74
+
 #define WHO_AM_I		0x75
+#define XA_OFFSET_H     0x77
+#define XA_OFFSET_L     0x78
+#define YA_OFFSET_H     0x7A
+#define YA_OFFSET_L     0x7B
+#define ZA_OFFSET_H     0x7D
+#define ZA_OFFSET_L     0x7E
+
 
 #define MPU9250_ADDR 	(0x68 << 1)
 
 
-uint8_t MPU_9250WhoAmI(void);
-void MPU_9250Init(void);
-void MPU_9250GetTemp(float *temp);
+uint8_t MPU9250WhoAmI(void);
+void MPU9250Reset(void);
+void MPU9250Init(void);
+void MPU9250Calibrate(void);
 
-void MPU_9250GetAccAxis(uint8_t *xAxis, uint8_t *yAxis, uint8_t *zAxis);
-void MPU_9250GetGyroAxis(uint8_t *xAxis, uint8_t *yAxis, uint8_t *zAxis);
+void MPU9250GetTemp(float *temp);
+void MPU9250GetAccAxis(uint8_t *xAxis, uint8_t *yAxis, uint8_t *zAxis);
+void MPU9250GetGyroAxis(uint8_t *xAxis, uint8_t *yAxis, uint8_t *zAxis);
 
 
 #endif /* INCLUDES_MPU_9250_H_ */

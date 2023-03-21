@@ -73,39 +73,83 @@ void i2cHardwareSetup(void)
 	i2cgpioSetup();
 }
 
-void i2cDevConfig(I2cDev_T *i2cDev, I2C_HandleTypeDef *hi2c, uint8_t *rxBuffer, uint8_t *txBuffer, uint8_t size)
+void i2cDevConfig(I2cDev_T *i2cDev, I2C_HandleTypeDef *hi2c)
 {
 	if(i2cDev == NULL)
 	{
 		// Report invalid device pointer
 	}
-	else if (txBuffer == NULL)
-	{
-		// Report invalid buffer pointer
-	}
-	else if (rxBuffer == NULL)
-	{
-		// Report invalid buffer pointer
-	}
 	else
 	{
 		i2cDev->hi2c = hi2c;
-		i2cDev->i2cRxBuffer = rxBuffer;
-		i2cDev->i2cTxBuffer = txBuffer;
-		i2cDev->size = size;
-
 		i2cHardwareSetup();
 	}
 }
 
 
-void i2c_Xfer(I2cDev_T *i2cDev, uint8_t *rxbuffer, uint8_t size)
+void i2cWriteByte(I2cDev_T *i2cDev, uint8_t devAddr, uint8_t reg, uint8_t data)
 {
-	//HAL_SPI_Transmit(&hspi1, &temp_data, 1, 100);
-	//HAL_SPI_Receive(&hspi1, data, len, 100);
-	//HAL_I2C_Master_Transmit();
-	//i2cDev->hi2c->Instance->SR1 &
+	uint8_t tmp[2] = {0};
+	HAL_StatusTypeDef retVal = HAL_ERROR;
+
+	tmp[0] = reg;
+	// Register reset value
+	tmp[1] = data;
+
+	retVal =  HAL_I2C_Master_Transmit(i2cDev->hi2c, devAddr, tmp, 2, HAL_MAX_DELAY);
+	if(retVal == HAL_ERROR)
+	{
+		//Report error while writing
+	}
 }
+
+
+uint8_t i2cReadByte(I2cDev_T *i2cDev, uint8_t devAddr, uint8_t reg)
+{
+	uint8_t tmp[2] = {0};
+	HAL_StatusTypeDef retVal = HAL_ERROR;
+
+	tmp[0] = reg;
+
+	retVal =  HAL_I2C_Master_Transmit(i2cDev->hi2c, devAddr, tmp, 1, HAL_MAX_DELAY);
+	if(retVal == HAL_ERROR)
+	{
+		//Report error while writing
+	}
+	else
+	{
+		retVal = HAL_I2C_Master_Receive(i2cDev->hi2c, devAddr, (tmp+1), 1, HAL_MAX_DELAY);
+		if(retVal == HAL_ERROR)
+		{
+			//Report error while reading
+		}
+	}
+	return tmp[1];
+}
+
+void i2cReadBytes(I2cDev_T *i2cDev, uint8_t devAddr, uint8_t reg, uint8_t * dataBuffer, uint8_t size)
+{
+	uint8_t tmp[15] = {0};
+	HAL_StatusTypeDef retVal = HAL_ERROR;
+
+	tmp[0] = devAddr;
+
+	retVal =  HAL_I2C_Master_Transmit(i2cDev->hi2c, devAddr, tmp, 1, HAL_MAX_DELAY);
+	if(retVal == HAL_ERROR)
+	{
+		//Report error while writing
+	}
+	else
+	{
+		retVal = HAL_I2C_Master_Receive(i2cDev->hi2c, devAddr, (tmp+1), size, HAL_MAX_DELAY);
+		if(retVal == HAL_ERROR)
+		{
+			//Report error while reading
+		}
+	}
+	memCopy((tmp+1), dataBuffer, size);
+}
+
 
 
 /**
