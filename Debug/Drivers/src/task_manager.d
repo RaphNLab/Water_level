@@ -1,5 +1,5 @@
-Drivers/src/mpu_9250.o: ../Drivers/src/mpu_9250.c \
- /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Drivers/includes/mpu_9250.h \
+Drivers/src/task_manager.o: ../Drivers/src/task_manager.c \
+ /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Drivers/includes/task_manager.h \
  /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Drivers/includes/global.h \
  /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Third_party/FreeRTOS/org/Source/include/FreeRTOS.h \
  /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Config/FreeRTOSConfig.h \
@@ -67,10 +67,12 @@ Drivers/src/mpu_9250.o: ../Drivers/src/mpu_9250.c \
  /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Third_party/FreeRTOS/org/Source/include/list.h \
  /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Third_party/FreeRTOS/org/Source/include/timers.h \
  /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Third_party/FreeRTOS/org/Source/include/task.h \
+ /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Drivers/includes/uart.h \
+ /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Drivers/includes/i2c.h \
  /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Drivers/includes/spi.h \
- /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Drivers/includes/i2c.h
+ /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Drivers/includes/mpu_9250.h
 
-/home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Drivers/includes/mpu_9250.h:
+/home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Drivers/includes/task_manager.h:
 
 /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Drivers/includes/global.h:
 
@@ -206,6 +208,10 @@ Drivers/src/mpu_9250.o: ../Drivers/src/mpu_9250.c \
 
 /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Third_party/FreeRTOS/org/Source/include/task.h:
 
-/home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Drivers/includes/spi.h:
+/home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Drivers/includes/uart.h:
 
 /home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Drivers/includes/i2c.h:
+
+/home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Drivers/includes/spi.h:
+
+/home/silvere/Work/Tuto/RTOS/RTOS_Workspace/Water_level/Drivers/includes/mpu_9250.h:

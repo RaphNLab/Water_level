@@ -25,6 +25,7 @@
 #define LP_ACCEL_ODR	0x1E
 
 #define FIFO_EN         0x23
+#define I2C_MST_CTRL    0x24
 #define INT_ENABLE      0x38
 #define ACCEL_XOUT_H	0x3B
 #define ACCEL_XOUT_L	0x3C
@@ -61,14 +62,29 @@
 #define MPU9250_ADDR 	(0x68 << 1)
 
 
+// Set initial input parameters
+enum Ascale {
+  AFS_2G = 0,
+  AFS_4G,
+  AFS_8G,
+  AFS_16G
+};
+
+enum Gscale {
+  GFS_250DPS = 0,
+  GFS_500DPS,
+  GFS_1000DPS,
+  GFS_2000DPS
+};
+
 uint8_t MPU9250WhoAmI(void);
 void MPU9250Reset(void);
 void MPU9250Init(void);
-void MPU9250Calibrate(void);
+void MPU9250Calibrate(float * dest1, float * dest2);
 
 void MPU9250GetTemp(float *temp);
-void MPU9250GetAccAxis(uint8_t *xAxis, uint8_t *yAxis, uint8_t *zAxis);
-void MPU9250GetGyroAxis(uint8_t *xAxis, uint8_t *yAxis, uint8_t *zAxis);
+void MPU9250GetAccAxis(uint16_t *xAxis, uint16_t *yAxis, uint16_t *zAxis);
+void MPU9250GetGyroAxis(uint16_t *xAxis, uint16_t *yAxis, uint16_t *zAxis);
 
 
 #endif /* INCLUDES_MPU_9250_H_ */

@@ -2,6 +2,7 @@
 "Drivers/src/memory.o"
 "Drivers/src/mpu_9250.o"
 "Drivers/src/spi.o"
+"Drivers/src/task_manager.o"
 "Drivers/src/uart.o"
 "HAL_Driver/Src/stm32l1xx_hal.o"
 "HAL_Driver/Src/stm32l1xx_hal_adc.o"

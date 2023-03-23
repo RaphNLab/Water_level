@@ -36,7 +36,9 @@ typedef enum
 	AT_LED_5_ON,
 	AT_LED_5_OFF,
 	AT_LED_6_ON,
-	AT_LED_6_OFF
+	AT_LED_6_OFF,
+	AT_STOP,
+	AT_START
 }UartAtCmd_t;
 
 

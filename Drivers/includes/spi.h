@@ -39,4 +39,8 @@ void spiSend(SpiDev_T *spiDev, uint8_t *rxBuffer, uint8_t size);
 void spiReceive(SpiDev_T *spiDev, uint8_t *txBuffer, uint8_t size);
 Bool_T spiSendReceive(SpiDev_T *spiDev, uint8_t *txBuffer, uint8_t *rxBuffer, uint16_t size);
 
+void spiWriteByte(SpiDev_T *i2cDev, uint8_t reg, uint8_t data);
+uint8_t spiReadByte(SpiDev_T *i2cDev, uint8_t reg);
+void spiReadBytes(SpiDev_T *spiDev, uint8_t reg, uint8_t *dataBuffer, uint8_t size);
+
 #endif /* INCLUDES_SPI_H_ */

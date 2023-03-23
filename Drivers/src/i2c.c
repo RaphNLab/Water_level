@@ -127,27 +127,28 @@ uint8_t i2cReadByte(I2cDev_T *i2cDev, uint8_t devAddr, uint8_t reg)
 	return tmp[1];
 }
 
-void i2cReadBytes(I2cDev_T *i2cDev, uint8_t devAddr, uint8_t reg, uint8_t * dataBuffer, uint8_t size)
+void i2cReadBytes(I2cDev_T *i2cDev, uint8_t devAddr, uint8_t reg, uint8_t *dataBuffer, uint8_t size)
 {
 	uint8_t tmp[15] = {0};
+	uint8_t daraReg[1] = {0};
 	HAL_StatusTypeDef retVal = HAL_ERROR;
 
-	tmp[0] = devAddr;
+	daraReg[0] = reg;
 
-	retVal =  HAL_I2C_Master_Transmit(i2cDev->hi2c, devAddr, tmp, 1, HAL_MAX_DELAY);
+	retVal =  HAL_I2C_Master_Transmit(i2cDev->hi2c, devAddr, daraReg, 1, HAL_MAX_DELAY);
 	if(retVal == HAL_ERROR)
 	{
 		//Report error while writing
 	}
 	else
 	{
-		retVal = HAL_I2C_Master_Receive(i2cDev->hi2c, devAddr, (tmp+1), size, HAL_MAX_DELAY);
+		retVal = HAL_I2C_Master_Receive(i2cDev->hi2c, devAddr, tmp, size, HAL_MAX_DELAY);
 		if(retVal == HAL_ERROR)
 		{
 			//Report error while reading
 		}
 	}
-	memCopy((tmp+1), dataBuffer, size);
+	memCopy(tmp, dataBuffer, size);
 }
 
 

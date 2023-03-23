@@ -9,56 +9,14 @@
 */
 
 #include "global.h"
-#include "uart.h"
-#include "i2c.h"
-#include "spi.h"
-#include "mpu_9250.h"
+#include "task_manager.h"
 
 
-
-typedef enum
-{
-	ACCELEROMETER_TASK = 0,
-	GYROSCOPE_TASK,
-	TEMPERATURE_TASK,
-	DEFAULT_TASK
-}TaskType_T;
-
-
-uint16_t ledDelay = 0;
-uint8_t notify = 0;
-uint8_t devAddr = 0;
-Bool_T accTimerFlag = FALSE;
-Bool_T tempTimerFlag = FALSE;
-
-const TickType_t tempTaskDelay = 10000 / portTICK_PERIOD_MS;
-const TickType_t accTaskDelay = 2000 / portTICK_PERIOD_MS;
-
-TaskHandle_t xledTaskHandle = NULL;
-TaskHandle_t xuartTaskHandle = NULL;
-TaskHandle_t xaccTaskHandle = NULL;
-TaskHandle_t xtempTaskHandle = NULL;
-
-TaskHandle_t xtimerTaskHandle = NULL;
-TimerHandle_t xAccTimerHandle = NULL;
-TimerHandle_t xTempTimerHandle = NULL;
-
-TaskType_T taskType = DEFAULT_TASK;
-
-/* functions prototypes */
-
-
-void vLedTaskHandler(void *params);
-void vUartCmdTaskHandler(void *params);
-void vUartHandleCmd(UartDev_T *uartDev);
-void vAccTaskHandler(void *params);
-void vTempTaskHandler(void *params);
-void accTaskCallback(TimerHandle_t xTimer);
-void tempTaskCallback(TimerHandle_t xTimer);
+float dest1[3];
+float dest2[3];
 
 void SystemClock_Config(void);
 void Error_Handler(void);
-void rtosDelay(uint16_t delay);
 
 int main(void)
 {
@@ -71,13 +29,19 @@ int main(void)
 	SystemCoreClockUpdate();
 
 	uartDevConfig(&uartDev, &huart2, uartRxBuffer, uartTxBuffer, 0);
-	i2cDevConfig(&i2cDev, &hi2c1);
+#ifdef USE_SPI
 	spiDevConfig(&spiDev, &hspi1, spiRxBuffer, spiTxBuffer, 0);
+#else
+	i2cDevConfig(&i2cDev, &hi2c1);
+#endif
+	 MPU9250Reset();
+	 MPU9250Init();
+	 //MPU9250Calibrate(dest1, dest2);
 
 	xTaskCreate(vUartCmdTaskHandler, "Command handler", 500, NULL, 2, &xuartTaskHandle);
 	xTaskCreate(vLedTaskHandler, "LED Task", 500, NULL, 2, &xledTaskHandle);
 
-	//xTaskCreate(vAccTaskHandler, "Accelerometer task", 500, NULL, 2, &xaccTaskHandle);
+	xTaskCreate(vAccTaskHandler, "Accelerometer task", 500, NULL, 2, &xaccTaskHandle);
 	xTaskCreate(vTempTaskHandler, "Temperature task", 500, NULL, 2, &xtempTaskHandle);
 
 	xTempTimerHandle = xTimerCreate(
@@ -87,200 +51,21 @@ int main(void)
 	                      (void *)0,            // Timer ID
 						  tempTaskCallback);  // Callback function
 
+	xAccTimerHandle = xTimerCreate(
+		                      "Accelerometer Task timer",     // Name of timer
+							  accTaskDelay,            // Period of timer (in ticks)
+		                      pdTRUE,              // Auto-reload
+		                      (void *)0,            // Timer ID
+							  accTaskCallback);  // Callback function
+
 	//Start the timer
 	xTimerStart(xTempTimerHandle, portMAX_DELAY);
+	xTimerStart(xAccTimerHandle, portMAX_DELAY);
+
 	/* Start the scheduler: This function will never return */
 	vTaskStartScheduler();
 
 	for(;;);
-}
-
-
-void vLedTaskHandler(void *params)
-{
-	while(1)
-	{
-		// Start toggleling if notification comes from uart task
-		if(notify)
-		{
-			HAL_GPIO_TogglePin(GPIOA, LED5_PIN);
-			vTaskDelay(ledDelay);
-		}
-	}
-}
-
-/* This function handle the watermeter task command*/
-void vAccTaskHandler(void *params)
-{
-	uint8_t accXAxis = 0;
-	uint8_t accYAxis = 0;
-	uint8_t accZAxis = 0;
-
-	while(1)
-	{
-		if(notify)
-		{
-			if(accTimerFlag)
-			{
-				MPU9250GetAccAxis(&accXAxis, &accYAxis, &accZAxis);
-				pPrintf("MPU9250 Accelerometer X Axis: %d \n", accXAxis);
-				pPrintf("MPU9250 Accelerometer Y Axis: %d \n", accYAxis);
-				pPrintf("MPU9250 Accelerometer Z Axis: %d \n", accZAxis);
-			}
-			accTimerFlag = FALSE;
-		}
-	}
-}
-
-/* callback to notify timer overflow
- * When the 2s are reached
- * */
-void accTaskCallback(TimerHandle_t xTimer)
-{
-	accTimerFlag = TRUE;
-}
-
-/* This function handle the temperature task command*/
-void vTempTaskHandler(void *params)
-{
-	float temperature = 0.0;
-	while(1)
-	{
-		if(notify)
-		{
-			//devAddr = MPU9250WhoAmI();
-
-			if(tempTimerFlag)
-			{
-				MPU9250GetTemp(&temperature);
-				pPrintf("MPU9250 Temperature: %d°C\n", (uint8_t)temperature);
-				//pPrintf("MPU9250 ADDR: 0x%X\n", (uint8_t)devAddr);
-			}
-
-			tempTimerFlag = FALSE;
-		}
-	}
-}
-
-/* callback to notify timer overflow
- * When the 10s are reached
- * */
-void tempTaskCallback(TimerHandle_t xTimer)
-{
-	tempTimerFlag = TRUE;
-}
-
-
-
-/* Handles incoming commands over uart */
-void vUartCmdTaskHandler(void *params)
-{
-	while(1)
-	{
-		vUartHandleCmd(&uartDev);
-	}
-}
-
-void vUartHandleCmd(UartDev_T *uartDev)
-{
-	if(uartDev->uartRxFlag == UART_RX_CMP)
-	{
-		if((strncasecmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_GET_TEMP], uartDev->size)) == 0)
-		{
-			// Call Temperature task
-			// Blink LED 1/2 second
-			ledDelay = LED_DELAY_500_MS;
-			notify = 1;
-			taskType = TEMPERATURE_TASK;
-			xTaskNotify(xledTaskHandle, 0, eNoAction);
-
-		}
-		else if((strncasecmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_GET_ACC], uartDev->size)) == 0)
-		{
-			// Call accelerometer
-			// Print angle every 2 seconds
-			// Turn LED every 1 second
-			ledDelay = LED_DELAY_1_S;
-			notify = 1;
-			taskType = ACCELEROMETER_TASK;
-			xTaskNotify(xledTaskHandle, 0, eNoAction);
-
-		}
-		else if((strncasecmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_LED_3_ON], uartDev->size)) == 0)
-		{
-			// Torn on LED
-			HAL_GPIO_WritePin(GPIOA, LED3_PIN, GPIO_PIN_SET);
-			notify = 0;
-			taskType = DEFAULT_TASK;
-		}
-		else if((strncasecmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_LED_3_OFF], uartDev->size)) == 0)
-		{
-			// Turn off led
-			HAL_GPIO_WritePin(GPIOA, LED3_PIN, GPIO_PIN_RESET);
-			notify = 0;
-			taskType = DEFAULT_TASK;
-		}
-		else if((strncasecmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_LED_4_ON], uartDev->size)) == 0)
-		{
-			// Torn on LED
-			HAL_GPIO_WritePin(GPIOA, LED4_PIN, GPIO_PIN_SET);
-			notify = 0;
-			taskType = DEFAULT_TASK;
-		}
-		else if((strncasecmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_LED_4_OFF], uartDev->size)) == 0)
-		{
-			// Turn off led
-			HAL_GPIO_WritePin(GPIOA, LED4_PIN, GPIO_PIN_RESET);
-			notify = 0;
-			taskType = DEFAULT_TASK;
-		}
-		else if((strncasecmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_LED_5_ON], uartDev->size)) == 0)
-		{
-			// Torn on LED
-			HAL_GPIO_WritePin(GPIOA, LED5_PIN, GPIO_PIN_SET);
-			notify = 0;
-			taskType = DEFAULT_TASK;
-		}
-		else if((strncasecmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_LED_5_OFF], uartDev->size)) == 0)
-		{
-			// Turn off led
-			HAL_GPIO_WritePin(GPIOA, LED5_PIN, GPIO_PIN_RESET);
-			notify = 0;
-			taskType = DEFAULT_TASK;
-		}
-		else if((strncasecmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_LED_6_ON], uartDev->size)) == 0)
-		{
-			// Torn on LED
-			HAL_GPIO_WritePin(GPIOA, LED6_PIN, GPIO_PIN_SET);
-			notify = 0;
-			taskType = DEFAULT_TASK;
-		}
-		else if((strncasecmp((const char*)uartDev->uartRxBuffer, (const char*)uartCmdList[AT_LED_6_OFF], uartDev->size)) == 0)
-		{
-			// Turn off led
-			HAL_GPIO_WritePin(GPIOA, LED6_PIN, GPIO_PIN_RESET);
-			notify = 0;
-			taskType = DEFAULT_TASK;
-		}
-		else
-		{
-			// Report invalid command
-			uartSendStr(uartDev, (uint8_t *)"Invalid CMD\r\n", strlen((const char*)"Invalid CMD\r\n"));
-			notify = 0;
-			taskType = DEFAULT_TASK;
-		}
-		// Reset the flag
-		uartDev->uartRxFlag = UART_NO_RX;
-		memErase(uartDev->uartRxBuffer, uartDev->size);
-	}
-}
-
-void rtosDelay(uint16_t delay)
-{
-	uint16_t currentDelay = xTaskGetTickCount();
-	// Get the tick value corresponding to the delay in ms
-	uint16_t delayInTick = (currentDelay * configTICK_RATE_HZ )/1000;
-	while(xTaskGetTickCount() < (currentDelay + delayInTick));
 }
 
 

@@ -8,6 +8,7 @@ C_SRCS += \
 ../Drivers/src/memory.c \
 ../Drivers/src/mpu_9250.c \
 ../Drivers/src/spi.c \
+../Drivers/src/task_manager.c \
 ../Drivers/src/uart.c 
 
 OBJS += \
@@ -15,6 +16,7 @@ OBJS += \
 ./Drivers/src/memory.o \
 ./Drivers/src/mpu_9250.o \
 ./Drivers/src/spi.o \
+./Drivers/src/task_manager.o \
 ./Drivers/src/uart.o 
 
 C_DEPS += \
@@ -22,6 +24,7 @@ C_DEPS += \
 ./Drivers/src/memory.d \
 ./Drivers/src/mpu_9250.d \
 ./Drivers/src/spi.d \
+./Drivers/src/task_manager.d \
 ./Drivers/src/uart.d 
 
 

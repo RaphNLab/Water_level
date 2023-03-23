@@ -199,6 +199,45 @@ Bool_T spiSendReceive(SpiDev_T *spiDev, uint8_t *txBuffer, uint8_t *rxBuffer, ui
 }
 
 
+void spiWriteByte(SpiDev_T *spiDev, uint8_t reg, uint8_t data)
+{
+	uint8_t tmp[2] = {0};
+
+	tmp[0] = reg;
+	// Register reset value
+	tmp[1] = data;
+
+	spiSend(spiDev, tmp, 2);
+}
+
+
+uint8_t spiReadByte(SpiDev_T *spiDev, uint8_t reg)
+{
+	uint8_t tmp[2] = {0};
+
+	tmp[0] = reg;
+
+	spiSend(spiDev, tmp, 1);
+	spiReceive(spiDev, (tmp+1), 1);
+
+	return tmp[1];
+}
+
+void spiReadBytes(SpiDev_T *spiDev, uint8_t reg, uint8_t *dataBuffer, uint8_t size)
+{
+	uint8_t tmp[15] = {0};
+	uint8_t daraReg[1] = {0};
+
+	daraReg[0] = reg;
+
+	spiSend(spiDev, daraReg, 1);
+	spiReceive(spiDev, tmp, size);
+
+	memCopy(tmp, dataBuffer, size);
+}
+
+
+
 /**
   * @brief This function handles SPI1 global interrupt.
   */

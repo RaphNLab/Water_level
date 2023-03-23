@@ -26,7 +26,9 @@ char *uartCmdList[] =
 	AT_LED(5, EIN),
 	AT_LED(5, AUS),
 	AT_LED(6, EIN),
-	AT_LED(6, AUS)
+	AT_LED(6, AUS),
+	"AT+STOP",
+	"AT+START"
 };
 
 
@@ -218,7 +220,6 @@ void USART2_IRQHandler(void)
 		if(uartDev.huart->Instance->DR != '\r')
 		{
 			uartDev.uartRxBuffer[isrCnt] = (uartDev.huart->Instance->DR  & (uint8_t)0xFF);
-			uartDev.size = isrCnt;
 			isrCnt++;
 		}
 		else // If the enter character is received
