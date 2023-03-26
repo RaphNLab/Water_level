@@ -48,4 +48,7 @@ void vTempTaskHandler(void *params);
 void accTaskCallback(TimerHandle_t xTimer);
 void tempTaskCallback(TimerHandle_t xTimer);
 
+float map(int16_t x, int16_t inMin, int16_t inMax, int16_t outMin, int16_t outMax);
+
+
 #endif /* INCLUDES_TASK_MANAGER_H_ */

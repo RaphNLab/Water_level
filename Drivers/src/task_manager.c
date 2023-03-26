@@ -43,6 +43,11 @@ void vAccTaskHandler(void *params)
 	uint16_t accXAxis = 0;
 	uint16_t accYAxis = 0;
 	uint16_t accZAxis = 0;
+	uint16_t min = 256;
+	uint16_t max = 402;
+	float xAng = 0;
+	float yAng = 0;
+	float zAng = 0;
 
 	while(1)
 	{
@@ -54,11 +59,23 @@ void vAccTaskHandler(void *params)
 				pPrintf("MPU9250 Accelerometer X Axis: %d \n", accXAxis);
 				pPrintf("MPU9250 Accelerometer Y Axis: %d \n", accYAxis);
 				pPrintf("MPU9250 Accelerometer Z Axis: %d \n", accZAxis);
+
+				xAng = map(accXAxis, min, max, -90, 90);
+				yAng = map(accYAxis, min, max, -90, 90);
+				zAng = RAD_TO_DEG * (atan2(-yAng, -xAng) + PI);
+
+				pPrintf("MPU9250 angle Z to G: %f \n", zAng);
 			}
 			accTimerFlag = FALSE;
 		}
 	}
 }
+
+float map(int16_t x, int16_t inMin, int16_t inMax, int16_t outMin, int16_t outMax)
+{
+	return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+}
+
 
 /* callback to notify timer overflow
  * When the 2s are reached

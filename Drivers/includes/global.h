@@ -12,6 +12,7 @@
 #include "stm32l1xx.h"
 #include "stm32l1xx_nucleo.h"
 #include "memory.h"
+#include "math.h"
 
 #include "task.h"
 #include "timers.h"
@@ -28,5 +29,7 @@ typedef enum
 	TRUE
 }Bool_T;
 
+#define PI 3.14
+#define RAD_TO_DEG   57.295779513
 
 #endif /* INCLUDES_GLOBAL_H_ */
